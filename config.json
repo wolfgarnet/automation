@@ -1,0 +1,6 @@
+{
+	"tasks": [
+		 {"type": "display", "text": "My text"},
+		 {"type": "display", "text": "My text2"}
+	]
+}
