@@ -1,7 +1,8 @@
 package tasks
 
 import (
-	"wolfgarnet/automation"
+	"wolfgarnet/automation/system"
+	"fmt"
 )
 
 type Display struct {
@@ -13,10 +14,11 @@ func NewDisplay(config map[string]interface{}) *Display {
 
 	}
 
+	fmt.Printf("New display")
+
 	return d
 }
 
 func init() {
-	println("HEJ")
-	automation.System.AddType("display", NewDisplay)
+	system.System.AddType("display", NewDisplay)
 }
