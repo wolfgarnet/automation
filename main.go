@@ -5,6 +5,7 @@ import (
 	"os"
 	"wolfgarnet/automation/system"
 	"wolfgarnet/automation/tasks"
+	"log"
 )
 
 func main() {
@@ -19,5 +20,12 @@ func main() {
 		os.Exit(1)
 	}
 
-	system.System.NewTasks(config)
+	tasks, err := system.System.NewTasks(config)
+	if err != nil {
+		log.Fatalf("Could not create tasks, %v", err)
+	}
+
+	tr := system.NewTaskRunner(tasks, false)
+	cache := make(map[string]interface{})
+	tr.Run(cache)
 }

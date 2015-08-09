@@ -1,10 +1,12 @@
 package system
 
-import "container/list"
+import (
+	"container/list"
+	"log"
+)
 
 type Task interface {
-	Process(cache map[string]interface{})
-	IsDistributed() bool
+	Process(cache map[string]interface{}) error
 }
 
 type TaskRunner struct {
@@ -12,16 +14,17 @@ type TaskRunner struct {
 	isDistributed bool
 }
 
-func NewTaskRunner() *TaskRunner {
+func NewTaskRunner(tasks *list.List, isDistributed bool) *TaskRunner {
 	tr := &TaskRunner{
-		tasks: list.New(),
-		isDistributed: false,
+		tasks: tasks,
+		isDistributed: isDistributed,
 	}
 
 	return tr
 }
 
 func (t TaskRunner) Run(cache map[string]interface{}) error {
+	log.Printf("Running tasks")
 	return nil
 }
 

@@ -5,24 +5,26 @@ import (
 	"errors"
 	"encoding/json"
 	"fmt"
+	"container/list"
+	"log"
 )
 
 type system struct {
-	types map[string]interface{}
+	types map[string]NewInstance
 }
 
 var System system
 
-type NewInstance func() action
+type NewInstance func(config map[string]interface{}) (Task, error)
 
 func init() {
 	println("Initializing system")
 	System = system{
-		types: make(map[string]interface{}),
+		types: make(map[string]NewInstance),
 	}
 }
 
-func (s system) AddType(name string, f interface{}) {
+func (s system) AddType(name string, f NewInstance) {
 	fmt.Printf("Adding %v\n", name)
 	s.types[name] = f
 }
@@ -43,54 +45,67 @@ func (s system) Read(path string) (map[string]interface{}, error) {
 	return conf, nil
 }
 
-func (s system) NewTasks(config map[string]interface{}) error {
+func (s system) NewTasks(config map[string]interface{}) (*list.List, error) {
 	tasks, ok := config["tasks"]
 	if !ok {
-		return errors.New("The field tasks was not found")
+		return nil, errors.New("The field tasks was not found")
 	}
 
 	switch vt := tasks.(type) {
 		case []interface{}:
 		fmt.Printf("vt: %v\n", vt)
 
+		tasks := new(list.List)
+
 		for t, val := range vt {
 			fmt.Printf("%v == %v\n", t, val)
 			mt, ok := val.(map[string]interface{})
 			if ok {
-				s.NewTask(mt)
+				task, err := s.NewTask(mt)
+				if err == nil {
+					log.Printf("Adding %v", task)
+					tasks.PushBack(task)
+				} else {
+					log.Printf("Could not add %v, %v", val, err)
+				}
 			}
 		}
+
+		return tasks, nil
 		default:
-		return errors.New("tasks field was wrong type")
+		return nil, errors.New("tasks field was wrong type")
 	}
 
-	return nil
+	return nil, nil
 }
 
-func (s system) NewTask(config map[string]interface{}) error {
+func (s system) NewTask(config map[string]interface{}) (Task, error) {
 	ftype, ok := config["type"]
 	if !ok {
-		return errors.New("The field type was not found")
+		return nil, errors.New("The field type was not found")
 	}
 
 	vt, ok := ftype.(string)
 	if !ok {
-		return errors.New("tasks field was wrong type")
+		return nil, errors.New("tasks field was wrong type")
 	}
 
 	fmt.Printf("vt: %v\n", vt)
 
 	f, err := s.getType(vt)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	f()
+	task, err := f(config)
+	if err != nil {
+		log.Fatalf("Unable to create task, %v", err)
+	}
 
-	return nil
+	return task, nil
 }
 
-func (s system) getType(name string) (f interface{}, err error) {
+func (s system) getType(name string) (f NewInstance, err error) {
 	f, ok := s.types[name]
 	if ok {
 		return
