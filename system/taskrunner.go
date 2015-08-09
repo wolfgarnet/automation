@@ -7,6 +7,7 @@ import (
 
 type Task interface {
 	Process(cache map[string]interface{}) error
+	conclude(failed bool) error
 }
 
 type TaskRunner struct {
@@ -26,6 +27,12 @@ func NewTaskRunner(tasks *list.List, isDistributed bool) *TaskRunner {
 func (t TaskRunner) Run(cache map[string]interface{}) error {
 	log.Printf("Running tasks")
 	return nil
+}
+
+func (t TaskRunner) Distribute(task *TaskRunner) error {
+	go func() {
+		println("DIST")
+	}()
 }
 
 func (t TaskRunner) runNext() error {
