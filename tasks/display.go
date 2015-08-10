@@ -11,7 +11,7 @@ type Display struct {
 	text string
 }
 
-	func NewDisplay(config map[string]interface{}) (system.Task, error) {
+func NewDisplay(config map[string]interface{}) (system.Task, error) {
 	tf, ok := config["text"]
 	if !ok {
 		return nil, errors.New("The field text was not found")
