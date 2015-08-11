@@ -2,10 +2,22 @@ package tasks
 
 import (
 	"fmt"
+	"regexp"
+	"log"
+	"log"
 )
 
 func Do() {
 	println("Initializing tasks")
+}
+
+var timeStringRX *regexp.Regexp
+
+func init() {
+	timeStringRX, err := regexp.Compile(`Hello`)
+	if err != nil {
+		log.Fatal("Unable to compile regexp")
+	}
 }
 
 func getTextField(config map[string]interface{}, field string) {
@@ -43,5 +55,5 @@ func getTimeText(config map[string]interface{}, field string) (int64, error) {
 		return -1, fmt.Errorf("Failed to get time text, %v", err)
 	}
 
-	
+	res := timeStringRX.FindAllString(val, -1)
 }
