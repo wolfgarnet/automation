@@ -16,16 +16,18 @@ func main() {
 
 	config, err := system.System.Read(*path)
 	if err != nil {
-		println(err)
+		log.Printf("ERROR, %v", err)
 		os.Exit(1)
 	}
 
+	log.Printf("Creating tasks")
 	tasks, err := system.System.NewTasks(config)
 	if err != nil {
 		log.Fatalf("Could not create tasks, %v", err)
 	}
 
-	tr := system.NewTaskRunner(tasks, false)
+	log.Printf("Running")
+	tr := system.NewTaskRunner(tasks)
 	cache := make(map[string]interface{})
 	tr.Run(cache)
 }

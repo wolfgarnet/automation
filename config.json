@@ -1,6 +1,7 @@
 {
-	"tasks": [
-		 {"type": "display", "text": "My text"},
-		 {"type": "display", "text": "My text2"}
-	]
+    "tasks": [
+	{"type": "display", "text": "My text"},
+	{"type": "display", "text": "My text2"},
+	{"type": "timedGroup", "duration": "1s"}
+    ]
 }

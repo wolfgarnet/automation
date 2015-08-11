@@ -43,3 +43,7 @@ func (d Display) Process(cache map[string]interface{}) error {
 	log.Printf(d.text)
 	return nil
 }
+
+func (d Display) Conclude(failed bool) error {
+	return nil
+}
