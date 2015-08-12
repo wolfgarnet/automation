@@ -3,6 +3,7 @@ package system
 import (
 	"container/list"
 	"log"
+	"fmt"
 )
 
 type Task interface {
@@ -12,11 +13,13 @@ type Task interface {
 
 type TaskRunner struct {
 	tasks *list.List
+	current *list.Element
 }
 
 func NewTaskRunner(tasks *list.List) *TaskRunner {
 	tr := &TaskRunner{
 		tasks: tasks,
+		current: nil,
 	}
 
 	return tr
@@ -24,6 +27,18 @@ func NewTaskRunner(tasks *list.List) *TaskRunner {
 
 func (t TaskRunner) Run(cache map[string]interface{}) error {
 	log.Printf("Running tasks")
+	if t.current == nil {
+		t.current = t.tasks.Front()
+	} else {
+		t.current = t.current.Next()
+	}
+	task := t.current.Value.(Task)
+	if task == nil {
+		return fmt.Errorf("Task is wrong type, %v", t.current.Value)
+	}
+
+	task.Process()
+
 	return nil
 }
 
