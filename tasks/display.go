@@ -41,6 +41,7 @@ func init() {
 
 func (d Display) Process(cache map[string]interface{}, tr *system.TaskRunner) error {
 	log.Printf(d.text)
+	tr.EndTask(false)
 	return nil
 }
 

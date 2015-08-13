@@ -65,3 +65,6 @@ func (t *TaskRunner) EndTask(failed bool) {
 	}
 }
 
+func (t TaskRunner) String() string {
+	return "Task runner"
+}
