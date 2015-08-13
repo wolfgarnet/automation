@@ -39,7 +39,7 @@ func init() {
 	system.System.AddType("display", NewDisplay)
 }
 
-func (d Display) Process(cache map[string]interface{}) error {
+func (d Display) Process(cache map[string]interface{}, tr *system.TaskRunner) error {
 	log.Printf(d.text)
 	return nil
 }

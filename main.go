@@ -27,7 +27,6 @@ func main() {
 	}
 
 	log.Printf("Running")
-	tr := &system.NewTaskRunner(tasks)
-	cache := make(map[string]interface{})
-	tr.Run(cache)
+	tr := system.NewTaskRunner(tasks)
+	tr.Run()
 }

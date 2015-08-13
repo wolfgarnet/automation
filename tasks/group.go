@@ -10,7 +10,7 @@ type TimedGroup struct {
 	duration int64
 }
 
-func (g TimedGroup) Process(cache map[string]interface{}) error {
+func (g TimedGroup) Process(cache map[string]interface{}, tr *system.TaskRunner) error {
 	log.Printf("---->%v", g.duration)
 	return nil
 }
@@ -24,7 +24,7 @@ type Group struct {
 	number uint32
 }
 
-func (g Group) Process(cache map[string]interface{}) error {
+func (g Group) Process(cache map[string]interface{}, tr *system.TaskRunner) error {
 	log.Printf("---->%v", g.number)
 	return nil
 }
