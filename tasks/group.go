@@ -18,16 +18,16 @@ func getBaseGroup(config map[string]interface{}) baseGroup {
 	return baseGroup{subTasks}
 }
 
-func createAndRun(subTasks []map[string]interface{}) error {
+func createTaskRunner(bg *baseGroup) (*system.TaskRunner, error) {
 	log.Printf("Creating and running sub tasks")
 
-	list, err := system.System.NewTasksFromArray(subTasks)
+	list, err := system.System.NewTasksFromArray(bg.subTasks)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	tr := system.NewTaskRunner(list)
-	return tr.Run()
+	return tr, nil
 }
 
 //
@@ -50,6 +50,17 @@ func NewGroup(config map[string]interface{}) (system.Task, error) {
 func (g Group) Process(cache map[string]interface{}, tr *system.TaskRunner) error {
 	log.Printf("---->%v", g.number)
 
+	var i uint32 = 0
+	for ;i < g.number; i++ {
+		innertr, err := createTaskRunner(&g.baseGroup)
+		if err != nil {
+			return err
+		}
+
+		innertr.Run()
+	}
+
+	tr.EndTask(false)
 
 	return nil
 }

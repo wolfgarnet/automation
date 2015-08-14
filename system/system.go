@@ -52,9 +52,14 @@ func (s system) NewTasksFromConfig(config map[string]interface{}) (*list.List, e
 	}
 
 	switch vt := tasks.(type) {
-		case []interface{}:
+		case []map[string]interface{}:
 		fmt.Printf("vt: %v\n", vt)
-
+		/*
+		mt, ok := vt.([]map[string]interface{})
+		if !ok {
+			return nil, fmt.Errorf("Incorrect type")
+		}
+		*/
 		return s.NewTasksFromArray(vt)
 		default:
 		return nil, errors.New("tasks field was wrong type")
@@ -63,20 +68,18 @@ func (s system) NewTasksFromConfig(config map[string]interface{}) (*list.List, e
 	return nil, nil
 }
 
-func (s system) NewTasksFromArray(array []interface{}) (*list.List, error) {
+func (s system) NewTasksFromArray(array []map[string]interface{}) (*list.List, error) {
 	tasks := new(list.List)
 
 	for t, val := range array {
 		fmt.Printf("%v == %v\n", t, val)
-		mt, ok := val.(map[string]interface{})
-		if ok {
-			task, err := s.NewTask(mt)
-			if err == nil {
-				log.Printf("Adding %v", task)
-				tasks.PushBack(task)
-			} else {
-				log.Printf("Could not add %v, %v", val, err)
-			}
+
+		task, err := s.NewTask(val)
+		if err == nil {
+			log.Printf("Adding %v", task)
+			tasks.PushBack(task)
+		} else {
+			log.Printf("Could not add %v, %v", val, err)
 		}
 	}
 
