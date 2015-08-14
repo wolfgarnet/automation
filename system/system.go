@@ -52,15 +52,26 @@ func (s system) NewTasksFromConfig(config map[string]interface{}) (*list.List, e
 	}
 
 	switch vt := tasks.(type) {
-		case []map[string]interface{}:
+		case []interface{}:
 		fmt.Printf("vt: %v\n", vt)
-		/*
-		mt, ok := vt.([]map[string]interface{})
-		if !ok {
-			return nil, fmt.Errorf("Incorrect type")
+
+		tasks := new(list.List)
+
+		for t, val := range vt {
+			fmt.Printf("%v == %v\n", t, val)
+			mt, ok := val.(map[string]interface{})
+			if ok {
+				task, err := s.NewTask(mt)
+				if err == nil {
+					log.Printf("Adding %v", task)
+					tasks.PushBack(task)
+				} else {
+					log.Printf("Could not add %v, %v", val, err)
+				}
+			}
 		}
-		*/
-		return s.NewTasksFromArray(vt)
+
+		return tasks, nil
 		default:
 		return nil, errors.New("tasks field was wrong type")
 	}
