@@ -26,7 +26,7 @@ func main() {
 		log.Fatalf("Could not create tasks, %v", err)
 	}
 
-	log.Printf("Running")
+	log.Printf("Running %v tasks", tasks.Len())
 	tr := system.NewTaskRunner(tasks)
 	tr.Run()
 }
