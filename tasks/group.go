@@ -19,6 +19,12 @@ func (g TimedGroup) Conclude(failed bool) error {
 	return nil
 }
 
+
+func (g TimedGroup) String() string {
+	return "Timed group"
+}
+
+
 // Group is repeated for a number of times
 type Group struct {
 	number uint32
@@ -31,6 +37,10 @@ func (g Group) Process(cache map[string]interface{}, tr *system.TaskRunner) erro
 
 func (g Group) Conclude(failed bool) error {
 	return nil
+}
+
+func (g Group) String() string {
+	return "Group"
 }
 
 // TinedIntervalGroup is repeated every interval in parallel for a give n duration
