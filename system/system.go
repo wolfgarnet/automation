@@ -79,18 +79,21 @@ func (s system) NewTasksFromConfig(config map[string]interface{}) (*list.List, e
 	return nil, nil
 }
 
-func (s system) NewTasksFromArray(array []map[string]interface{}) (*list.List, error) {
+func (s system) NewTasksFromArray(array []interface{}) (*list.List, error) {
 	tasks := new(list.List)
 
 	for t, val := range array {
 		fmt.Printf("%v == %v\n", t, val)
 
-		task, err := s.NewTask(val)
-		if err == nil {
-			log.Printf("Adding %v", task)
-			tasks.PushBack(task)
-		} else {
-			log.Printf("Could not add %v, %v", val, err)
+		c, ok := val.(map[string]interface{})
+		if ok {
+			task, err := s.NewTask(c)
+			if err == nil {
+				log.Printf("Adding %v", task)
+				tasks.PushBack(task)
+			} else {
+				log.Printf("Could not add %v, %v", val, err)
+			}
 		}
 	}
 

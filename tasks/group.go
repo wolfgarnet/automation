@@ -7,14 +7,15 @@ import (
 
 func init() {
 	system.System.AddType("timedGroup", NewTimedGroup)
+	system.System.AddType("group", NewGroup)
 }
 
 type baseGroup struct {
-	subTasks []map[string]interface{}
+	subTasks []interface{}
 }
 
 func getBaseGroup(config map[string]interface{}) baseGroup {
-	subTasks := config["tasks"].([]map[string]interface{})
+	subTasks := config["tasks"].([]interface{})
 	return baseGroup{subTasks}
 }
 
