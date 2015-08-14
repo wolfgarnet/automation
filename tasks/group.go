@@ -9,15 +9,38 @@ func init() {
 	system.System.AddType("timedGroup", NewTimedGroup)
 }
 
+type baseGroup struct {
+	subTasks []map[string]interface{}
+}
+
+func getBaseGroup(config map[string]interface{}) baseGroup {
+	subTasks := config["tasks"].([]map[string]interface{})
+	return baseGroup{subTasks}
+}
+
+func createAndRun(subTasks []map[string]interface{}) error {
+	log.Printf("Creating and running sub tasks")
+
+	list, err := system.System.NewTasksFromArray(subTasks)
+	if err != nil {
+		return err
+	}
+
+	tr := system.NewTaskRunner(list)
+	return tr.Run()
+}
+
 //
 //
 // Group is repeated for a number of times
 type Group struct {
+	baseGroup
 	number uint32
 }
 
 func NewGroup(config map[string]interface{}) (system.Task, error) {
 	g := &Group{
+		baseGroup: getBaseGroup(config),
 		number: 1,
 	}
 
@@ -27,7 +50,7 @@ func NewGroup(config map[string]interface{}) (system.Task, error) {
 func (g Group) Process(cache map[string]interface{}, tr *system.TaskRunner) error {
 	log.Printf("---->%v", g.number)
 
-	
+
 	return nil
 }
 

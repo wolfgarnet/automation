@@ -21,7 +21,7 @@ func main() {
 	}
 
 	log.Printf("Creating tasks")
-	tasks, err := system.System.NewTasks(config)
+	tasks, err := system.System.NewTasksFromConfig(config)
 	if err != nil {
 		log.Fatalf("Could not create tasks, %v", err)
 	}
