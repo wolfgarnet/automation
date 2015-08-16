@@ -94,6 +94,7 @@ type IntervalGroup struct {
 //
 // TimedGroup is repeated sequentially for a given duration
 type TimedGroup struct {
+	baseGroup
 	duration int64
 }
 
@@ -105,6 +106,7 @@ func NewTimedGroup(config map[string]interface{}) (system.Task, error) {
 		return nil, fmt.Errorf("The field, number, is not a valid time string, %v", err)
 	}
 	g := &TimedGroup{
+		baseGroup: getBaseGroup(config),
 		duration: ms,
 	}
 
