@@ -75,10 +75,10 @@ func getTimeText(config map[string]interface{}, name string) (int64, error) {
 		return -1, fmt.Errorf("Failed to get time text, %v", err)
 	}
 
-	i, isInt := val.(int64)
-	if isInt {
-		log.Printf("VALUE IS %v", val)
-		return strconv.ParseInt(i, 10, 64)
+	i, err := strconv.ParseInt(val, 10, 64)
+	if err == nil {
+		log.Printf("VALUE IS %v", i)
+		return i, nil
 	}
 
 	log.Printf("Time string: %v", val)
