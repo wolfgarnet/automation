@@ -1,4 +1,5 @@
 package tasks
+
 import (
 	"wolfgarnet/automation/system"
 	"log"
