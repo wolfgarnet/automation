@@ -138,5 +138,8 @@ func (s system) getType(name string) (f NewInstance, err error) {
 }
 
 func (s system) Run(tr *TaskRunner) {
-	fmt.Printf("Running %v\n", tr)
+	fmt.Printf("(GO)Running %v\n", tr)
+	go func() {
+		tr.Run()
+	}()
 }
