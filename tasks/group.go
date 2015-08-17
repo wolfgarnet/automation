@@ -4,6 +4,7 @@ import (
 	"wolfgarnet/automation/system"
 	"log"
 	"fmt"
+	"time"
 )
 
 func init() {
@@ -112,6 +113,15 @@ func NewTimedGroup(config map[string]interface{}) (system.Task, error) {
 	}
 
 	return g, nil
+}
+
+func (g TimedGroup) spawn(tr *system.TaskRunner) {
+	log.Printf("Spawning tasks")
+	system.System.Run(tr)
+
+	time.Sleep(g.duration * time.Millisecond)
+
+	if g.
 }
 
 func (g TimedGroup) Process(cache map[string]interface{}, tr *system.TaskRunner) error {
