@@ -46,14 +46,6 @@ func (t *TaskRunner) Run() error {
 	return task.Process(t.cache, t)
 }
 
-func (t *TaskRunner) Distribute(task *TaskRunner) error {
-	go func() {
-		println("DIST")
-	}()
-
-	return nil
-}
-
 func (t *TaskRunner) EndTask(failed bool) {
 	log.Printf("Task ended, %v", t.current)
 
