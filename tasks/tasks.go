@@ -75,6 +75,12 @@ func getTimeText(config map[string]interface{}, name string) (int64, error) {
 		return -1, fmt.Errorf("Failed to get time text, %v", err)
 	}
 
+	i, isInt := val.(int64)
+	if isInt {
+		log.Printf("VALUE IS %v", val)
+		return strconv.ParseInt(i, 10, 64)
+	}
+
 	log.Printf("Time string: %v", val)
 
 	res := timeStringRX.FindAllStringSubmatch(val, -1)
@@ -90,5 +96,5 @@ func getTimeText(config map[string]interface{}, name string) (int64, error) {
 
 	log.Printf("MS: %v", ms)
 
-	return 1000, nil
+	return ms, nil
 }
